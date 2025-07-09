@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // const students = [
 //   { id: 1, name: 'Aarav Sharma', city: 'Delhi' },
@@ -118,7 +118,7 @@ export default function StudentsList() {
                 <td className="px-4 py-2 border">{student.city}</td>
                 <td className="px-4 py-2 border space-x-2">
                   <button
-                    onClick={() => handleEdit(student.id)}
+                    // onClick={() => handleEdit(student.id)}
                     className="px-3 py-1 text-sm bg-yellow-400 text-white rounded hover:bg-yellow-500"
                   >
                     Edit
