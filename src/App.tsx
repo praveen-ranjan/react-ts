@@ -7,6 +7,7 @@ import Navbar from './UI/Navbar';
 import StudentsList from './pages/StudentsList';
 import AddStudent from './pages/AddStudent';
 import AboutUs from './pages/AboutUs';
+import Products from './pages/Products';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/students" element={<StudentsList />} />
           <Route path="/students/add" element={<AddStudent />} />
           <Route path="/about" element={<AboutUs />} />
+          <Route path="/products" element={<Products />} />
           <Route path="*" element={<div>Page Not Found</div>} />
         </Routes>
       </div>
