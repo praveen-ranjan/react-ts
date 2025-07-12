@@ -1,8 +1,35 @@
 import { useProducts } from "../hooks/useProducts";
+import { CartContext } from '../providers/cartContext';
+import { useContext, useState } from 'react';
 
 const Products = () => {
 
+  // Track quantity per product ID
+  const [quantities, setQuantities] = useState<{ [productId: number]: number }>({});
   const { products, loading, error } = useProducts();
+  const cart = useContext(CartContext);
+  if (!cart) return null; // or show a fallback
+
+  const { addToCart, cartItems } = cart;
+
+  const handleQtyChange = (productId: number, qty: number) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [productId]: qty,
+    }));
+  };
+
+  const getQty = (productId: number) => {
+    // Check if item is already in the cart
+    const itemInCart = cartItems.find(item => item.id === productId);
+    if (itemInCart) {
+        return itemInCart.quantity;
+    }
+
+    // Otherwise, fallback to local state or default
+    return quantities[productId] || 1;
+  };
+ 
 
   if (loading) {
     return (
@@ -33,19 +60,21 @@ const Products = () => {
                 <p className="text-md font-bold text-blue-600">₹{item.price}</p>
                 <div className="flex items-center gap-2">
                     <label htmlFor={`qty-${item.id}`} className="text-sm text-gray-600">Qty:</label>
-                    <select
+                   <select
                     id={`qty-${item.id}`}
                     name="quantity"
                     className="border rounded px-2 py-1 text-sm"
-                    defaultValue={1}
-                    >
+                    value={getQty(item.id)}
+                    onChange={(e) => handleQtyChange(item.id, Number(e.target.value))}
+                  >
                     {[1, 2, 3, 4, 5].map(qty => (
-                        <option key={qty} value={qty}>{qty}</option>
+                      <option key={qty} value={qty}>{qty}</option>
                     ))}
-                    </select>
+                  </select>
                 </div>
                 </div>
-              <button className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">
+              <button onClick={() => addToCart(item, getQty(item.id))}
+               className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">
                 Add to Cart
               </button>
             </div>
